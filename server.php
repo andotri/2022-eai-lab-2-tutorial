@@ -1,8 +1,8 @@
 <?php
-require_once ('lib/nusoap.php');
+require 'vendor/autoload.php';
 $server = new soap_server();
 
-$namespace = 'http://localhost/2022-eai-lab-2-tutorial/server.php';
+$namespace = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
 $server->configureWSDL('HospitalApp');
 $server->wsdl->schemaTargetNamespace = $namespace;
 
@@ -28,11 +28,11 @@ function get_diagnose($category, $name) {
     if($category == 'basic') {
         $medicalrecord = join(', ', array(
             "Fever", "Influenza", "Allergic of Antibiotic"
-            ));
+        ));
         return "The patient: $name diagnoses are: $medicalrecord";
     }
     else {
-        return 'The patient doesn\'t have basic medical record ';
+        return 'The patient doesn\'t have basic medical record';
     }
 }
 
@@ -53,6 +53,7 @@ $server->register('get_message',
     'encoded',
     'Metode Hello World Sederhana'
 );
+
 $server->register('get_diagnose',
     array(
         'category' => 'xsd:string',
@@ -76,8 +77,5 @@ $server->register('reformat_data',
     'Metode mengubah data pasien'
 );
 
-if(!isset($HTTP_RAW_POST_DATA)) {
-    $HTTP_RAW_POST_DATA = file_get_contents('php://input');
-}
 $server->service(file_get_contents("php://input"));
 exit();

@@ -1,15 +1,20 @@
 <?php
-require_once ('lib/nusoap.php');
-$client = new nusoap_client('http://localhost/2022-eai-lab-2-tutorial/server.php');
+require 'vendor/autoload.php';
 
-$response = $client->call('get_message', array('name' => 'Fasilkom'));
+$namespace = 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI'];
+$namespace = str_replace('client.php','server.php', $namespace);
+$client = new nusoap_client($namespace);
+
+$response = $client->call('get_message', array(
+    'name' => 'Fasilkom'
+));
 echo $response;
 
 echo '<br>';
 $response = $client->call('get_diagnose', array(
     'category' => 'basic',
     'name' => 'Jack'
-    ));
+));
 echo $response;
 
 echo '<br>';
