@@ -24,6 +24,16 @@ function get_message($name) {
     return "Welcome $name";
 }
 
+$server->register('get_message',
+    array('name' => 'xsd:string'),
+    array('return' => 'xsd:string'),
+    $namespace,
+    false,
+    'rpc',
+    'encoded',
+    'Metode Hello World Sederhana'
+);
+
 function get_diagnose($category, $name) {
     if($category == 'basic') {
         $medicalrecord = join(', ', array(
@@ -35,24 +45,6 @@ function get_diagnose($category, $name) {
         return 'The patient doesn\'t have basic medical record';
     }
 }
-
-function reformat_data($medicalpatient) {
-    $medicalpatient['ID'] = 'KODE: ' . $medicalpatient['ID'];
-    $medicalpatient['first_name'] = 'Mr. ' . $medicalpatient['first_name'];
-    $medicalpatient['age'] = date('Y-m-d') - $medicalpatient['birthdate'];
-
-    return $medicalpatient;
-}
-
-$server->register('get_message',
-    array('name' => 'xsd:string'),
-    array('return' => 'xsd:string'),
-    $namespace,
-    false,
-    'rpc',
-    'encoded',
-    'Metode Hello World Sederhana'
-);
 
 $server->register('get_diagnose',
     array(
@@ -66,6 +58,14 @@ $server->register('get_diagnose',
     'encoded',
     'Metode Get Diagnose Sederhana'
 );
+
+function reformat_data($medicalpatient) {
+    $medicalpatient['ID'] = 'KODE: ' . $medicalpatient['ID'];
+    $medicalpatient['first_name'] = 'Mr. ' . $medicalpatient['first_name'];
+    $medicalpatient['age'] = date('Y-m-d') - $medicalpatient['birthdate'];
+
+    return $medicalpatient;
+}
 
 $server->register('reformat_data',
     array('medicalpatient' => 'tns:medicalpatient'),
